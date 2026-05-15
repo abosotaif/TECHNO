@@ -254,3 +254,30 @@ html[dir='rtl'] .hero { text-align: right; }
   .site-header nav { gap: 0.25rem; width: 100%; justify-content: flex-start; }
   .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 }
+
+
+/* ---------- Product card extras ---------- */
+.card .thumb { position: relative; }
+.badge {
+  position: absolute;
+  top: 0.5rem;
+  inset-inline-start: 0.5rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+.badge-featured { background: var(--color-accent); color: #1f1300; }
+.badge-sale {
+  background: var(--color-danger);
+  inset-inline-start: auto;
+  inset-inline-end: 0.5rem;
+}
+.price-row { display: flex; gap: 0.5rem; align-items: baseline; flex-wrap: wrap; }
+.price-strike {
+  color: var(--color-muted);
+  text-decoration: line-through;
+  font-size: 0.85rem;
+}

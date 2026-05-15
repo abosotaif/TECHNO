@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { ProductCard } from '@/components/ProductCard';
+import { useGetProductsQuery } from '@/features/products/productsApi';
+
 export default function Home() {
   const { t } = useTranslation();
+  const { data: featured } = useGetProductsQuery({ featured: true, perPage: 6 });
+
   return (
     <>
       <section className="hero">
@@ -35,6 +40,24 @@ export default function Home() {
           </div>
         </article>
       </section>
+
+      {featured && featured.data.length > 0 && (
+        <section style={{ marginBlock: '2.5rem 1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem' }}>
+            <h2 style={{ margin: 0 }}>{t('home.featured_title')}</h2>
+            <Link to="/products" className="meta" style={{ marginInlineStart: 'auto' }}>
+              {t('home.see_all')} →
+            </Link>
+          </div>
+          <ul className="product-grid" style={{ listStyle: 'none', margin: '1rem 0 0', padding: 0 }}>
+            {featured.data.map((p) => (
+              <li key={p.id}>
+                <ProductCard product={p} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </>
   );
 }

@@ -18,7 +18,9 @@
     "feature_support_title": "دعم محلي",
     "feature_support_text": "خدمة ما بعد البيع عندما تحتاج إليها.",
     "feature_delivery_title": "توصيل سريع",
-    "feature_delivery_text": "شحن موثوق إلى جميع المحافظات."
+    "feature_delivery_text": "شحن موثوق إلى جميع المحافظات.",
+    "featured_title": "المنتجات المميزة",
+    "see_all": "عرض الكل"
   },
   "products": {
     "title": "المنتجات",
@@ -28,7 +30,8 @@
     "empty": "لا توجد منتجات مطابقة.",
     "view": "عرض",
     "out_of_stock": "غير متوفر",
-    "in_stock": "متوفر"
+    "in_stock": "متوفر",
+    "featured": "مميز"
   },
   "product": {
     "back_to_list": "العودة إلى المنتجات",

@@ -4,14 +4,17 @@ export interface Product {
   id: number;
   name: string;
   slug: string;
+  sku: string | null;
   category: string;
   brand: string | null;
   description: string | null;
   price: number;
+  original_price: number | null;
   currency: string;
   stock: number;
   image_url: string | null;
   is_active: boolean;
+  is_featured: boolean;
   created_at: string | null;
   updated_at: string | null;
 }
@@ -39,6 +42,7 @@ export interface ProductListArgs {
   q?: string;
   category?: string;
   brand?: string;
+  featured?: boolean;
 }
 
 export const productsApi = api.injectEndpoints({
@@ -51,6 +55,7 @@ export const productsApi = api.injectEndpoints({
         if (args?.q) params.set('q', args.q);
         if (args?.category) params.set('category', args.category);
         if (args?.brand) params.set('brand', args.brand);
+        if (args?.featured !== undefined) params.set('featured', args.featured ? '1' : '0');
         const qs = params.toString();
         return `/products${qs ? `?${qs}` : ''}`;
       },

@@ -11,16 +11,19 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::firstOrCreate(
+        User::updateOrCreate(
             ['email' => 'admin@vision-techno.test'],
             [
                 'name'     => 'Admin',
                 'password' => Hash::make('password'),
+                'is_admin' => true,
             ],
         );
 
         if (Product::count() === 0) {
-            Product::factory()->count(24)->create();
+            // 60 random products + 6 explicitly featured.
+            Product::factory()->count(60)->create();
+            Product::factory()->count(6)->featured()->create();
         }
     }
 }

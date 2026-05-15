@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { ProductCard } from '@/components/ProductCard';
 import { useGetProductsQuery } from '@/features/products/productsApi';
 
 const CATEGORIES = ['laptops', 'tablets', 'smartphones', 'accessories', 'monitors'] as const;
@@ -67,26 +67,7 @@ export default function Products() {
         <ul className="product-grid" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
           {data.data.map((p) => (
             <li key={p.id}>
-              <Link to={`/products/${p.slug}`} className="card" aria-label={p.name}>
-                <div
-                  className="thumb"
-                  style={{ backgroundImage: p.image_url ? `url(${p.image_url})` : undefined }}
-                  aria-hidden
-                />
-                <div className="body">
-                  <strong>{p.name}</strong>
-                  <span className="meta">
-                    {p.brand ? `${p.brand} • ` : ''}
-                    {p.category}
-                  </span>
-                  <span className="price">
-                    {p.price.toFixed(2)} {p.currency}
-                  </span>
-                  <span className="meta">
-                    {p.stock > 0 ? t('products.in_stock') : t('products.out_of_stock')}
-                  </span>
-                </div>
-              </Link>
+              <ProductCard product={p} />
             </li>
           ))}
         </ul>

@@ -18,7 +18,9 @@
     "feature_support_title": "Local support",
     "feature_support_text": "After-sales support whenever you need it.",
     "feature_delivery_title": "Fast delivery",
-    "feature_delivery_text": "Reliable nationwide shipping."
+    "feature_delivery_text": "Reliable nationwide shipping.",
+    "featured_title": "Featured products",
+    "see_all": "See all"
   },
   "products": {
     "title": "Products",
@@ -28,7 +30,8 @@
     "empty": "No products match your filters.",
     "view": "View",
     "out_of_stock": "Out of stock",
-    "in_stock": "In stock"
+    "in_stock": "In stock",
+    "featured": "Featured"
   },
   "product": {
     "back_to_list": "Back to products",

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ProductCard } from '@/components/ProductCard';
+import { useDocumentMeta } from '@/lib/useDocumentMeta';
 import { useGetProductsQuery } from '@/features/products/productsApi';
 
 const CATEGORIES = ['laptops', 'tablets', 'smartphones', 'accessories', 'monitors'] as const;
@@ -31,6 +32,14 @@ export default function Products() {
   );
 
   const { data, isFetching, isError } = useGetProductsQuery(args);
+
+  useDocumentMeta({
+    title: category
+      ? `${t('products.title')} — ${category}`
+      : t('products.title'),
+    description: t('home.hero_subtitle'),
+    type: 'website',
+  });
 
   return (
     <>

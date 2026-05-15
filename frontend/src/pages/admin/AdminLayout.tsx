@@ -1,8 +1,17 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { useDocumentMeta } from '@/lib/useDocumentMeta';
+
 export default function AdminLayout() {
   const { t } = useTranslation();
+
+  // The whole /admin/* tree must never be indexed.
+  useDocumentMeta({
+    title: t('nav.admin'),
+    robots: 'noindex,nofollow',
+  });
+
   return (
     <div className="admin-shell">
       <aside className="admin-nav" aria-label={t('admin.nav_label')}>

@@ -99,3 +99,11 @@ The frontend reads `VITE_API_URL` (default `http://127.0.0.1:8000/api`) and stor
 - Build the SPA with `npm run build` and serve `frontend/dist` from a CDN or behind Nginx; reverse-proxy `/api/*` to the Laravel app.
 - Keep `APP_DEBUG=false` in production. The exception renderer hides traces unless debug mode is on.
 - Add a real role/policy layer before exposing the write endpoints publicly.
+
+## SEO
+
+- Each public page sets its own `<title>`, meta description, canonical URL, and Open Graph / Twitter tags via the `useDocumentMeta` hook.
+- Product detail pages emit a `Schema.org/Product` JSON-LD block (price, currency, availability, brand). Google can read these from JS-rendered SPAs.
+- `frontend/public/robots.txt` allows public pages and disallows `/admin`, `/cart`, `/checkout`, `/orders`, `/login`, `/register`. The same private routes set `<meta name="robots" content="noindex,nofollow">` at runtime as defence-in-depth.
+- The backend exposes `/sitemap.xml` listing the home page, the product index, and every active product. In production, configure your edge layer (Cloudflare, CDN, or your frontend Nginx) to proxy `/sitemap.xml` and `/robots.txt` to the appropriate origin.
+- For best-in-class SEO, migrate the SPA to Next.js or add a build-time prerender step — both are out of scope for this commit, but the data-fetching layer is already framework-agnostic (RTK Query) and would migrate cleanly.

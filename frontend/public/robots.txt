@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /cart
+Disallow: /checkout
+Disallow: /orders
+Disallow: /orders/
+Disallow: /login
+Disallow: /register
+
+# The sitemap is generated dynamically by the API and exposed at the site root.
+# In production, configure your edge / CDN to proxy /sitemap.xml -> backend.
+Sitemap: /sitemap.xml

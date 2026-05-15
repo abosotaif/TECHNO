@@ -3,7 +3,39 @@ import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch } from '@/app/hooks';
 import { addToCart } from '@/features/cart/cartSlice';
-import { useGetProductQuery } from '@/features/products/productsApi';
+import { useGetProductQuery, type Product } from '@/features/products/productsApi';
+import { useDocumentMeta } from '@/lib/useDocumentMeta';
+
+const BRAND = 'Vision Techno';
+
+/**
+ * Build a Schema.org Product JSON-LD object from a Product. Google reads
+ * these even from JS-rendered SPAs, so this is the highest-leverage SEO
+ * win without server-side rendering.
+ */
+function buildProductJsonLd(p: Product, url: string): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org/',
+    '@type': 'Product',
+    name: p.name,
+    sku: p.sku ?? undefined,
+    description: p.description ?? undefined,
+    image: p.image_url ? [p.image_url] : undefined,
+    brand: p.brand ? { '@type': 'Brand', name: p.brand } : undefined,
+    category: p.category,
+    offers: {
+      '@type': 'Offer',
+      url,
+      priceCurrency: p.currency,
+      price: p.price.toFixed(2),
+      availability:
+        p.stock > 0
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock',
+      seller: { '@type': 'Organization', name: BRAND },
+    },
+  };
+}
 
 export default function ProductDetail() {
   const { slug = '' } = useParams();
@@ -11,6 +43,15 @@ export default function ProductDetail() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { data, isLoading, isError } = useGetProductQuery(slug, { skip: !slug });
+
+  // Always call hooks unconditionally; pass undefined-safe inputs.
+  useDocumentMeta({
+    title: data?.data?.name ?? t('product.not_found_title'),
+    description: data?.data?.description ?? t('product.not_found_text'),
+    image: data?.data?.image_url ?? undefined,
+    type: 'product',
+    jsonLd: data?.data ? buildProductJsonLd(data.data, window.location.href) : undefined,
+  });
 
   if (isLoading) return <p>{t('products.loading')}</p>;
 

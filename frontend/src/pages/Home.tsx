@@ -2,11 +2,18 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { ProductCard } from '@/components/ProductCard';
+import { useDocumentMeta } from '@/lib/useDocumentMeta';
 import { useGetProductsQuery } from '@/features/products/productsApi';
 
 export default function Home() {
   const { t } = useTranslation();
   const { data: featured } = useGetProductsQuery({ featured: true, perPage: 6 });
+
+  useDocumentMeta({
+    title: t('home.hero_title'),
+    description: t('home.hero_subtitle'),
+    type: 'website',
+  });
 
   return (
     <>

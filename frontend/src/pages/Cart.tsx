@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { removeFromCart, setQuantity, clearCart } from '@/features/cart/cartSlice';
 import { selectCartItems, selectCartTotals } from '@/features/cart/selectors';
+import { useDocumentMeta } from '@/lib/useDocumentMeta';
 
 export default function Cart() {
   const { t } = useTranslation();
@@ -13,6 +14,11 @@ export default function Cart() {
   const items = useAppSelector(selectCartItems);
   const totals = useAppSelector(selectCartTotals);
   const isAuthed = useAppSelector((s) => Boolean(s.auth.token));
+
+  useDocumentMeta({
+    title: t('cart.title'),
+    robots: 'noindex,nofollow',
+  });
 
   if (items.length === 0) {
     return (

@@ -8,6 +8,11 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "noEmit": true,
+    /*
+     * vite.config.ts uses Node built-ins (path, __dirname). The "node" type
+     * package is therefore required at build time and is declared in
+     * frontend/package.json devDependencies as @types/node.
+     */
     "types": ["node"]
   },
   "include": ["vite.config.ts"]

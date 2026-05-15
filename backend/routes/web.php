@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -9,3 +10,6 @@ Route::get('/', function () {
         'docs'    => '/api',
     ]);
 });
+
+// SEO: dynamic sitemap of public pages + active products.
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');

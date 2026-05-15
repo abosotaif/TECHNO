@@ -14,7 +14,7 @@ class ProductController extends Controller
 {
     /**
      * GET /api/products
-     * Optional filters: ?q=, ?category=, ?brand=, ?per_page=
+     * Filters: q, category, brand, featured (1/0), per_page
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -23,7 +23,8 @@ class ProductController extends Controller
         if ($search = $request->string('q')->toString()) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('sku', 'like', "%{$search}%");
             });
         }
 
@@ -35,11 +36,18 @@ class ProductController extends Controller
             $query->where('brand', $brand);
         }
 
+        if ($request->has('featured')) {
+            $query->where('is_featured', $request->boolean('featured'));
+        }
+
         $perPage = (int) $request->integer('per_page', 12);
         $perPage = max(1, min($perPage, 100));
 
         return ProductResource::collection(
-            $query->orderByDesc('created_at')->paginate($perPage)->withQueryString()
+            $query->orderByDesc('is_featured')
+                  ->orderByDesc('created_at')
+                  ->paginate($perPage)
+                  ->withQueryString()
         );
     }
 

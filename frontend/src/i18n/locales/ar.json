@@ -4,6 +4,9 @@
   "nav": {
     "home": "الرئيسية",
     "products": "المنتجات",
+    "cart": "السلة",
+    "orders": "طلباتي",
+    "admin": "لوحة الإدارة",
     "login": "تسجيل الدخول",
     "register": "إنشاء حساب",
     "logout": "تسجيل الخروج",
@@ -18,7 +21,9 @@
     "feature_support_title": "دعم محلي",
     "feature_support_text": "خدمة ما بعد البيع عندما تحتاج إليها.",
     "feature_delivery_title": "توصيل سريع",
-    "feature_delivery_text": "شحن موثوق إلى جميع المحافظات."
+    "feature_delivery_text": "شحن موثوق إلى جميع المحافظات.",
+    "featured_title": "المنتجات المميزة",
+    "see_all": "عرض الكل"
   },
   "products": {
     "title": "المنتجات",
@@ -28,15 +33,60 @@
     "empty": "لا توجد منتجات مطابقة.",
     "view": "عرض",
     "out_of_stock": "غير متوفر",
-    "in_stock": "متوفر"
+    "in_stock": "متوفر",
+    "featured": "مميز"
   },
   "product": {
     "back_to_list": "العودة إلى المنتجات",
     "category": "الفئة",
     "brand": "الماركة",
     "stock": "المخزون",
+    "add_to_cart": "أضف إلى السلة",
+    "buy_now": "اشترِ الآن",
     "not_found_title": "المنتج غير موجود",
     "not_found_text": "المنتج الذي تبحث عنه غير موجود أو لم يعد متاحًا."
+  },
+  "cart": {
+    "title": "سلة التسوق",
+    "empty": "سلتك فارغة.",
+    "go_shopping": "ابدأ التسوق",
+    "remove": "حذف",
+    "subtotal": "المجموع الفرعي",
+    "shipping": "الشحن",
+    "free": "مجاني",
+    "total": "الإجمالي",
+    "checkout": "إتمام الشراء",
+    "clear": "تفريغ السلة"
+  },
+  "checkout": {
+    "title": "إتمام الشراء",
+    "summary": "ملخص الطلب",
+    "name": "الاسم الكامل",
+    "phone": "رقم الهاتف",
+    "address": "العنوان",
+    "city": "المدينة",
+    "country": "البلد",
+    "notes": "ملاحظات (اختياري)",
+    "place_order": "إتمام الطلب",
+    "placing": "جاري إرسال الطلب...",
+    "shipping_to": "عنوان التوصيل",
+    "payment_stub_notice": "الدفع تجريبي في هذا الإصدار، وسيتم اعتبار الطلب مدفوعًا فورًا."
+  },
+  "orders": {
+    "title": "طلباتي",
+    "empty": "لم تقم بأي طلبات بعد.",
+    "order": "طلب",
+    "items": "عناصر",
+    "back": "العودة إلى الطلبات",
+    "not_found_title": "الطلب غير موجود",
+    "placed_success": "شكرًا لك! تم استلام طلبك.",
+    "status": {
+      "pending": "قيد الانتظار",
+      "paid": "مدفوع",
+      "shipped": "تم الشحن",
+      "delivered": "تم التسليم",
+      "cancelled": "ملغي"
+    }
   },
   "auth": {
     "login_title": "تسجيل الدخول إلى حسابك",
@@ -69,5 +119,54 @@
     "title": "الصفحة غير موجودة",
     "text": "الصفحة التي طلبتها غير موجودة.",
     "go_home": "الرجوع للرئيسية"
+  },
+  "admin": {
+    "dashboard": "لوحة التحكم",
+    "products": "المنتجات",
+    "orders": "الطلبات",
+    "nav_label": "تنقل لوحة الإدارة",
+    "new_product": "منتج جديد",
+    "edit_product": "تعديل المنتج",
+    "back_to_products": "العودة إلى المنتجات",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "view": "عرض",
+    "save": "حفظ",
+    "saving": "جاري الحفظ...",
+    "cancel": "إلغاء",
+    "refresh": "تحديث",
+    "all_statuses": "كل الحالات",
+    "confirm_delete": "حذف \"{{name}}\"؟ لا يمكن التراجع.",
+    "stats": {
+      "products": "إجمالي المنتجات",
+      "orders": "إجمالي الطلبات",
+      "awaiting_shipment": "بانتظار الشحن"
+    },
+    "col": {
+      "name": "الاسم",
+      "category": "الفئة",
+      "price": "السعر",
+      "stock": "المخزون",
+      "active": "نشط",
+      "actions": "إجراءات",
+      "date": "التاريخ",
+      "customer": "العميل",
+      "total": "الإجمالي",
+      "status": "الحالة"
+    },
+    "field": {
+      "name": "الاسم",
+      "sku": "رمز المنتج",
+      "category": "الفئة",
+      "brand": "الماركة",
+      "description": "الوصف",
+      "price": "السعر",
+      "original_price": "السعر الأصلي (قبل الخصم)",
+      "currency": "العملة",
+      "stock": "المخزون",
+      "image_url": "رابط الصورة",
+      "is_active": "نشط",
+      "is_featured": "مميز"
+    }
   }
 }

@@ -94,7 +94,24 @@ The frontend reads `VITE_API_URL` (default `http://127.0.0.1:8000/api`) and stor
 
 ## Production notes
 
+- See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for the full Docker / CI / hosting guide. TL;DR: `docker compose up --build` runs the entire stack (MySQL + backend + frontend) end-to-end.
 - Run `php artisan config:cache route:cache view:cache` after deploy.
 - Build the SPA with `npm run build` and serve `frontend/dist` from a CDN or behind Nginx; reverse-proxy `/api/*` to the Laravel app.
 - Keep `APP_DEBUG=false` in production. The exception renderer hides traces unless debug mode is on.
 - Add a real role/policy layer before exposing the write endpoints publicly.
+
+## SEO
+
+- Each public page sets its own `<title>`, meta description, canonical URL, and Open Graph / Twitter tags via the `useDocumentMeta` hook.
+- Product detail pages emit a `Schema.org/Product` JSON-LD block (price, currency, availability, brand). Google can read these from JS-rendered SPAs.
+- `frontend/public/robots.txt` allows public pages and disallows `/admin`, `/cart`, `/checkout`, `/orders`, `/login`, `/register`. The same private routes set `<meta name="robots" content="noindex,nofollow">` at runtime as defence-in-depth.
+- The backend exposes `/sitemap.xml` listing the home page, the product index, and every active product. In production, configure your edge layer (Cloudflare, CDN, or your frontend Nginx) to proxy `/sitemap.xml` and `/robots.txt` to the appropriate origin.
+- For best-in-class SEO, migrate the SPA to Next.js or add a build-time prerender step — both are out of scope for this commit, but the data-fetching layer is already framework-agnostic (RTK Query) and would migrate cleanly.
+
+## Real-time updates
+
+- The backend uses **Laravel Reverb** (Pusher-protocol WebSockets, first-party) for broadcasting.
+- A `ProductStockUpdated` event is dispatched whenever stock changes — both at order placement (after the DB transaction commits) and at admin product update (only if the stock value actually changed).
+- The frontend's `useProductStockChannel(productId, onChange)` hook subscribes to the public `products.{id}` channel via `laravel-echo` + `pusher-js`. `ProductDetail` uses it to keep the displayed stock and the "in stock" badge live.
+- The hook **gracefully no-ops** when `VITE_REVERB_*` env vars aren't set — local dev still works without a running Reverb server, you just don't get live updates.
+- Run the broadcaster with: `cd backend && php artisan reverb:start` (defaults to `0.0.0.0:8080`). Set `BROADCAST_CONNECTION=reverb` in `.env`. Configure `REVERB_APP_ID`, `REVERB_APP_KEY`, `REVERB_APP_SECRET` and mirror `VITE_REVERB_APP_KEY` / `VITE_REVERB_HOST` / `VITE_REVERB_PORT` / `VITE_REVERB_SCHEME` on the frontend.

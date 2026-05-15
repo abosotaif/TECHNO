@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\AdminOrderController;
+use App\Http\Controllers\Api\Admin\AdminProductController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
@@ -34,14 +36,28 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
     });
 
-    // Orders (owner-only). Admin sees all via /api/admin/orders later.
-    Route::get('/orders',          [OrderController::class, 'index']);
-    Route::get('/orders/{order}',  [OrderController::class, 'show']);
-    Route::post('/orders',         [OrderController::class, 'store']);
+    // Orders (owner-only). Admin sees all via /api/admin/orders.
+    Route::get('/orders',         [OrderController::class, 'index']);
+    Route::get('/orders/{order}', [OrderController::class, 'show']);
+    Route::post('/orders',        [OrderController::class, 'store']);
 
-    // Admin-only mutations on products. EnsureAdmin middleware is added in step 3.
-    Route::post('/products',            [ProductController::class, 'store']);
-    Route::put('/products/{product}',   [ProductController::class, 'update']);
-    Route::patch('/products/{product}', [ProductController::class, 'update']);
-    Route::delete('/products/{product}', [ProductController::class, 'destroy']);
+    /*
+    |----------------------------------------------------------------------
+    | Admin API
+    |----------------------------------------------------------------------
+    */
+    Route::middleware('admin')->prefix('admin')->group(function () {
+        // Products
+        Route::get('/products',              [AdminProductController::class, 'index']);
+        Route::post('/products',             [AdminProductController::class, 'store']);
+        Route::get('/products/{product}',    [AdminProductController::class, 'show']);
+        Route::put('/products/{product}',    [AdminProductController::class, 'update']);
+        Route::patch('/products/{product}',  [AdminProductController::class, 'update']);
+        Route::delete('/products/{product}', [AdminProductController::class, 'destroy']);
+
+        // Orders
+        Route::get('/orders',                [AdminOrderController::class, 'index']);
+        Route::get('/orders/{order}',        [AdminOrderController::class, 'show']);
+        Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus']);
+    });
 });

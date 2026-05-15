@@ -408,3 +408,118 @@ html[dir='rtl'] .hero { text-align: right; }
   border-radius: var(--radius-sm);
   padding: 0.75rem 1rem;
 }
+
+
+/* ---------- Admin shell ---------- */
+.admin-shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+.admin-nav {
+  position: sticky;
+  top: 5rem;
+  display: grid;
+  gap: 0.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.5rem;
+}
+.admin-nav a {
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+}
+.admin-nav a:hover { background: var(--color-bg); text-decoration: none; }
+.admin-nav a.active,
+.admin-nav a[aria-current='page'] {
+  background: var(--color-primary);
+  color: var(--color-primary-fg);
+}
+.admin-main { min-width: 0; }
+
+@media (max-width: 720px) {
+  .admin-shell { grid-template-columns: 1fr; }
+  .admin-nav   { position: static; }
+}
+
+/* ---------- Admin stats ---------- */
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-block: 1rem;
+}
+.admin-stats .stat {
+  padding: 1rem;
+  display: grid;
+  gap: 0.25rem;
+}
+.admin-stats .stat strong { font-size: 1.6rem; }
+
+/* ---------- Admin table ---------- */
+.admin-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+.admin-table th,
+.admin-table td {
+  text-align: start;
+  padding: 0.75rem 0.85rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+.admin-table th {
+  background: var(--color-bg);
+  font-weight: 600;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.admin-table tr:last-child td { border-bottom: 0; }
+
+.btn-sm { padding: 0.3rem 0.55rem; font-size: 0.85rem; }
+
+/* ---------- Admin form ---------- */
+.admin-form { max-width: 760px; }
+.admin-form .form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+.admin-form textarea {
+  font: inherit;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  resize: vertical;
+}
+.admin-form .checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-direction: row;
+  color: var(--color-text);
+}
+.admin-form .checkbox input { width: 1.05rem; height: 1.05rem; }
+
+/* Admin order status select keeps the colored badge background */
+.admin-table select.badge-status {
+  border: 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}

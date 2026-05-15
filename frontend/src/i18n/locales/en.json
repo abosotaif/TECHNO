@@ -119,5 +119,54 @@
     "title": "Page not found",
     "text": "The page you requested could not be found.",
     "go_home": "Go home"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "orders": "Orders",
+    "nav_label": "Admin navigation",
+    "new_product": "New product",
+    "edit_product": "Edit product",
+    "back_to_products": "Back to products",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "refresh": "Refresh",
+    "all_statuses": "All statuses",
+    "confirm_delete": "Delete \"{{name}}\"? This cannot be undone.",
+    "stats": {
+      "products": "Total products",
+      "orders": "Total orders",
+      "awaiting_shipment": "Awaiting shipment"
+    },
+    "col": {
+      "name": "Name",
+      "category": "Category",
+      "price": "Price",
+      "stock": "Stock",
+      "active": "Active",
+      "actions": "Actions",
+      "date": "Date",
+      "customer": "Customer",
+      "total": "Total",
+      "status": "Status"
+    },
+    "field": {
+      "name": "Name",
+      "sku": "SKU",
+      "category": "Category",
+      "brand": "Brand",
+      "description": "Description",
+      "price": "Price",
+      "original_price": "Original price (for sale)",
+      "currency": "Currency",
+      "stock": "Stock",
+      "image_url": "Image URL",
+      "is_active": "Active",
+      "is_featured": "Featured"
+    }
   }
 }

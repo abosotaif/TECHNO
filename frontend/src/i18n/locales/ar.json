@@ -119,5 +119,54 @@
     "title": "الصفحة غير موجودة",
     "text": "الصفحة التي طلبتها غير موجودة.",
     "go_home": "الرجوع للرئيسية"
+  },
+  "admin": {
+    "dashboard": "لوحة التحكم",
+    "products": "المنتجات",
+    "orders": "الطلبات",
+    "nav_label": "تنقل لوحة الإدارة",
+    "new_product": "منتج جديد",
+    "edit_product": "تعديل المنتج",
+    "back_to_products": "العودة إلى المنتجات",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "view": "عرض",
+    "save": "حفظ",
+    "saving": "جاري الحفظ...",
+    "cancel": "إلغاء",
+    "refresh": "تحديث",
+    "all_statuses": "كل الحالات",
+    "confirm_delete": "حذف \"{{name}}\"؟ لا يمكن التراجع.",
+    "stats": {
+      "products": "إجمالي المنتجات",
+      "orders": "إجمالي الطلبات",
+      "awaiting_shipment": "بانتظار الشحن"
+    },
+    "col": {
+      "name": "الاسم",
+      "category": "الفئة",
+      "price": "السعر",
+      "stock": "المخزون",
+      "active": "نشط",
+      "actions": "إجراءات",
+      "date": "التاريخ",
+      "customer": "العميل",
+      "total": "الإجمالي",
+      "status": "الحالة"
+    },
+    "field": {
+      "name": "الاسم",
+      "sku": "رمز المنتج",
+      "category": "الفئة",
+      "brand": "الماركة",
+      "description": "الوصف",
+      "price": "السعر",
+      "original_price": "السعر الأصلي (قبل الخصم)",
+      "currency": "العملة",
+      "stock": "المخزون",
+      "image_url": "رابط الصورة",
+      "is_active": "نشط",
+      "is_featured": "مميز"
+    }
   }
 }

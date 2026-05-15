@@ -94,6 +94,7 @@ The frontend reads `VITE_API_URL` (default `http://127.0.0.1:8000/api`) and stor
 
 ## Production notes
 
+- See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for the full Docker / CI / hosting guide. TL;DR: `docker compose up --build` runs the entire stack (MySQL + backend + frontend) end-to-end.
 - Run `php artisan config:cache route:cache view:cache` after deploy.
 - Build the SPA with `npm run build` and serve `frontend/dist` from a CDN or behind Nginx; reverse-proxy `/api/*` to the Laravel app.
 - Keep `APP_DEBUG=false` in production. The exception renderer hides traces unless debug mode is on.

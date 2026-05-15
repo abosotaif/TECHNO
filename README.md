@@ -107,3 +107,11 @@ The frontend reads `VITE_API_URL` (default `http://127.0.0.1:8000/api`) and stor
 - `frontend/public/robots.txt` allows public pages and disallows `/admin`, `/cart`, `/checkout`, `/orders`, `/login`, `/register`. The same private routes set `<meta name="robots" content="noindex,nofollow">` at runtime as defence-in-depth.
 - The backend exposes `/sitemap.xml` listing the home page, the product index, and every active product. In production, configure your edge layer (Cloudflare, CDN, or your frontend Nginx) to proxy `/sitemap.xml` and `/robots.txt` to the appropriate origin.
 - For best-in-class SEO, migrate the SPA to Next.js or add a build-time prerender step — both are out of scope for this commit, but the data-fetching layer is already framework-agnostic (RTK Query) and would migrate cleanly.
+
+## Real-time updates
+
+- The backend uses **Laravel Reverb** (Pusher-protocol WebSockets, first-party) for broadcasting.
+- A `ProductStockUpdated` event is dispatched whenever stock changes — both at order placement (after the DB transaction commits) and at admin product update (only if the stock value actually changed).
+- The frontend's `useProductStockChannel(productId, onChange)` hook subscribes to the public `products.{id}` channel via `laravel-echo` + `pusher-js`. `ProductDetail` uses it to keep the displayed stock and the "in stock" badge live.
+- The hook **gracefully no-ops** when `VITE_REVERB_*` env vars aren't set — local dev still works without a running Reverb server, you just don't get live updates.
+- Run the broadcaster with: `cd backend && php artisan reverb:start` (defaults to `0.0.0.0:8080`). Set `BROADCAST_CONNECTION=reverb` in `.env`. Configure `REVERB_APP_ID`, `REVERB_APP_KEY`, `REVERB_APP_SECRET` and mirror `VITE_REVERB_APP_KEY` / `VITE_REVERB_HOST` / `VITE_REVERB_PORT` / `VITE_REVERB_SCHEME` on the frontend.

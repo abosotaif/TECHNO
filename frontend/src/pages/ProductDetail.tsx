@@ -1,9 +1,11 @@
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch } from '@/app/hooks';
 import { addToCart } from '@/features/cart/cartSlice';
 import { useGetProductQuery, type Product } from '@/features/products/productsApi';
+import { useProductStockChannel } from '@/features/products/useProductStockChannel';
 import { useDocumentMeta } from '@/lib/useDocumentMeta';
 
 const BRAND = 'Vision Techno';
@@ -13,7 +15,7 @@ const BRAND = 'Vision Techno';
  * these even from JS-rendered SPAs, so this is the highest-leverage SEO
  * win without server-side rendering.
  */
-function buildProductJsonLd(p: Product, url: string): Record<string, unknown> {
+function buildProductJsonLd(p: Product, stock: number, url: string): Record<string, unknown> {
   return {
     '@context': 'https://schema.org/',
     '@type': 'Product',
@@ -29,7 +31,7 @@ function buildProductJsonLd(p: Product, url: string): Record<string, unknown> {
       priceCurrency: p.currency,
       price: p.price.toFixed(2),
       availability:
-        p.stock > 0
+        stock > 0
           ? 'https://schema.org/InStock'
           : 'https://schema.org/OutOfStock',
       seller: { '@type': 'Organization', name: BRAND },
@@ -44,13 +46,31 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const { data, isLoading, isError } = useGetProductQuery(slug, { skip: !slug });
 
-  // Always call hooks unconditionally; pass undefined-safe inputs.
+  // Live stock state. Seeded from the API response and overwritten by
+  // ProductStockUpdated broadcasts. Falls back to the API value when Reverb
+  // is not configured.
+  const [liveStock, setLiveStock] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (data?.data) setLiveStock(data.data.stock);
+  }, [data?.data?.id, data?.data?.stock]);
+
+  const handleStockChange = useCallback((stock: number) => {
+    setLiveStock(stock);
+  }, []);
+
+  useProductStockChannel(data?.data?.id ?? null, handleStockChange);
+
+  const effectiveStock = liveStock ?? data?.data?.stock ?? 0;
+
   useDocumentMeta({
     title: data?.data?.name ?? t('product.not_found_title'),
     description: data?.data?.description ?? t('product.not_found_text'),
     image: data?.data?.image_url ?? undefined,
     type: 'product',
-    jsonLd: data?.data ? buildProductJsonLd(data.data, window.location.href) : undefined,
+    jsonLd: data?.data
+      ? buildProductJsonLd(data.data, effectiveStock, window.location.href)
+      : undefined,
   });
 
   if (isLoading) return <p>{t('products.loading')}</p>;
@@ -69,16 +89,16 @@ export default function ProductDetail() {
 
   const p = data.data;
   const onSale = p.original_price !== null && p.original_price > p.price;
-  const inStock = p.stock > 0;
+  const inStock = effectiveStock > 0;
 
   const handleAdd = () => {
     if (!inStock) return;
-    dispatch(addToCart({ product: p, quantity: 1 }));
+    dispatch(addToCart({ product: { ...p, stock: effectiveStock }, quantity: 1 }));
   };
 
   const handleBuy = () => {
     if (!inStock) return;
-    dispatch(addToCart({ product: p, quantity: 1 }));
+    dispatch(addToCart({ product: { ...p, stock: effectiveStock }, quantity: 1 }));
     navigate('/cart');
   };
 
@@ -126,8 +146,9 @@ export default function ProductDetail() {
               </span>
             )}
           </div>
-          <p className="meta" style={{ margin: 0 }}>
-            {t('product.stock')}: {p.stock}
+          <p className="meta" aria-live="polite" style={{ margin: 0 }}>
+            {t('product.stock')}: {effectiveStock}
+            {inStock ? '' : ` — ${t('products.out_of_stock')}`}
           </p>
           {p.description && <p style={{ marginTop: '0.5rem' }}>{p.description}</p>}
 

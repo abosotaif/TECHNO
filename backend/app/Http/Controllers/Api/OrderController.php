@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ProductStockUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Resources\OrderResource;
@@ -53,7 +54,8 @@ class OrderController extends Controller
         $payload = $request->validated();
         $userId  = $request->user()->id;
 
-        $order = DB::transaction(function () use ($payload, $userId) {
+        /** @var array{order: Order, touched: array<int, Product>} $result */
+        $result = DB::transaction(function () use ($payload, $userId) {
             // Lock referenced product rows for the duration of the tx.
             $productIds = collect($payload['items'])->pluck('product_id')->unique();
 
@@ -117,6 +119,8 @@ class OrderController extends Controller
                 'shipping_notes'   => $payload['shipping_notes'] ?? null,
             ]);
 
+            $touched = [];
+
             foreach ($rows as $row) {
                 /** @var Product $p */
                 $p = $row['product'];
@@ -133,12 +137,23 @@ class OrderController extends Controller
                 ]);
 
                 $p->decrement('stock', $row['qty']);
+                $p->refresh();
+                $touched[] = $p;
             }
 
-            return $order->load('items');
+            return [
+                'order'   => $order->load('items'),
+                'touched' => $touched,
+            ];
         });
 
-        return response()->json(['data' => new OrderResource($order)], 201);
+        // Broadcast stock changes after the transaction commits so listeners
+        // always see the new value if they refetch via REST.
+        foreach ($result['touched'] as $p) {
+            ProductStockUpdated::dispatch($p);
+        }
+
+        return response()->json(['data' => new OrderResource($result['order'])], 201);
     }
 
     private function ensureOwner(Request $request, Order $order): void

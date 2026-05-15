@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Events\ProductStockUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
@@ -51,7 +52,15 @@ class AdminProductController extends Controller
 
     public function update(ProductRequest $request, Product $product): JsonResponse
     {
+        $previousStock = (int) $product->stock;
         $product->update($request->validated());
+
+        // Broadcast only when stock actually changed; admins editing a name
+        // or description shouldn't ping every connected client.
+        if ((int) $product->stock !== $previousStock) {
+            ProductStockUpdated::dispatch($product);
+        }
+
         return response()->json(['data' => new ProductResource($product)]);
     }
 

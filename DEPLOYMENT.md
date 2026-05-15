@@ -100,3 +100,46 @@ Required permissions are already declared in the workflow (`packages: write`) �
 | Frontend   | Cloudflare Pages, Netlify, Vercel, S3+CloudFront    |
 | Database   | PlanetScale (MySQL), Neon (Postgres), AWS RDS       |
 | Object storage (later) | Cloudflare R2, AWS S3                  |
+
+
+
+## Deploying the SPA to Vercel
+
+The frontend is a Vite + React SPA — a perfect fit for Vercel. The Laravel backend is **not** deployed to Vercel; it goes on Render, Railway, Fly.io, or a VPS (Vercel's serverless model breaks queues, WebSockets, and persistent storage).
+
+### One-time setup
+
+1. https://vercel.com → "Add New Project" → import this repo.
+2. **Root Directory: `frontend`** (this repo is a monorepo).
+3. Framework Preset auto-detects **Vite** and uses `frontend/vercel.json`:
+   - Build: `npm run build`
+   - Output: `dist`
+   - SPA fallback rewrite: `/((?!.*\\.).*)` → `/index.html` so `/products/abc` doesn't 404 on refresh.
+   - `assets/*` cached for a year, `index.html` never cached.
+4. Set the environment variables (Production + Preview):
+
+   | Variable                | Value                                       |
+   | ----------------------- | ------------------------------------------- |
+   | `VITE_API_URL`          | `https://api.your-domain.com/api`           |
+   | `VITE_REVERB_APP_KEY`   | the same key as backend `REVERB_APP_KEY` (omit to disable real-time) |
+   | `VITE_REVERB_HOST`      | host where `php artisan reverb:start` is exposed |
+   | `VITE_REVERB_PORT`      | usually `443` behind a TLS proxy            |
+   | `VITE_REVERB_SCHEME`    | `https` in production                       |
+
+5. Click **Deploy**. Vercel will give you `https://your-app.vercel.app`.
+6. Custom domain: Project → Settings → Domains → add `vision-techno.com`. Copy the DNS records Vercel shows you and apply them at your registrar.
+
+### After the backend is up
+
+Update `VITE_API_URL` and `SANCTUM_STATEFUL_DOMAINS` (on the backend) so they reference each other's real domains, then trigger a redeploy on both sides.
+
+### What happens on every push
+
+- Push to `main` → Vercel builds and promotes to Production.
+- Push to a feature branch / open a PR → Vercel builds a Preview deployment and posts the URL on the PR. Each preview gets its own URL, which is perfect for review.
+
+### What Vercel will *not* do for this project
+
+- Run the Laravel API.
+- Run Reverb / WebSockets.
+- Serve `/sitemap.xml` (that's a backend route — point your DNS / proxy at the backend host for `/sitemap.xml` and `/robots.txt`-overrides if you want them under the apex domain).

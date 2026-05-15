@@ -4,11 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useLogoutMutation } from '@/features/auth/authApi';
 import { clearCredentials } from '@/features/auth/authSlice';
+import { selectCartCount } from '@/features/cart/selectors';
 
 export function Header() {
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const user = useAppSelector((s) => s.auth.user);
+  const cartCount = useAppSelector(selectCartCount);
   const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 
   const toggleLang = () => {
@@ -20,7 +22,6 @@ export function Header() {
     try {
       await logout().unwrap();
     } catch {
-      // 401 / network: still clear local state.
       dispatch(clearCredentials());
     }
   };
@@ -38,8 +39,15 @@ export function Header() {
           </NavLink>
           <NavLink to="/products">{t('nav.products')}</NavLink>
 
+          <NavLink to="/cart" className="cart-link" aria-label={t('nav.cart')}>
+            {t('nav.cart')}
+            {cartCount > 0 && <span className="cart-badge" aria-hidden>{cartCount}</span>}
+          </NavLink>
+
           {user ? (
             <>
+              <NavLink to="/orders">{t('nav.orders')}</NavLink>
+              {user.is_admin && <NavLink to="/admin">{t('nav.admin')}</NavLink>}
               <span aria-hidden style={{ opacity: 0.7 }}>•</span>
               <span aria-label={t('nav.account')}>{user.name}</span>
               <button

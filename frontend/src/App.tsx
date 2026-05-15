@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { Layout } from '@/components/Layout';
+import { RequireAuth } from '@/components/RequireAuth';
 
 // Code-split route components so each page is a separate chunk.
 const Home = lazy(() => import('@/pages/Home'));
@@ -9,6 +10,10 @@ const Products = lazy(() => import('@/pages/Products'));
 const ProductDetail = lazy(() => import('@/pages/ProductDetail'));
 const Login = lazy(() => import('@/pages/Login'));
 const Register = lazy(() => import('@/pages/Register'));
+const Cart = lazy(() => import('@/pages/Cart'));
+const Checkout = lazy(() => import('@/pages/Checkout'));
+const MyOrders = lazy(() => import('@/pages/MyOrders'));
+const OrderDetail = lazy(() => import('@/pages/OrderDetail'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
 export default function App() {
@@ -18,8 +23,33 @@ export default function App() {
         <Route index element={<Home />} />
         <Route path="products" element={<Products />} />
         <Route path="products/:slug" element={<ProductDetail />} />
+        <Route path="cart" element={<Cart />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route
+          path="checkout"
+          element={
+            <RequireAuth>
+              <Checkout />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="orders"
+          element={
+            <RequireAuth>
+              <MyOrders />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="orders/:id"
+          element={
+            <RequireAuth>
+              <OrderDetail />
+            </RequireAuth>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

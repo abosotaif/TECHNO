@@ -4,6 +4,9 @@
   "nav": {
     "home": "Home",
     "products": "Products",
+    "cart": "Cart",
+    "orders": "My orders",
+    "admin": "Admin",
     "login": "Sign in",
     "register": "Register",
     "logout": "Sign out",
@@ -38,8 +41,52 @@
     "category": "Category",
     "brand": "Brand",
     "stock": "Stock",
+    "add_to_cart": "Add to cart",
+    "buy_now": "Buy now",
     "not_found_title": "Product not found",
     "not_found_text": "The product you are looking for does not exist or is no longer available."
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "go_shopping": "Go shopping",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
+    "total": "Total",
+    "checkout": "Proceed to checkout",
+    "clear": "Clear cart"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "summary": "Order summary",
+    "name": "Full name",
+    "phone": "Phone",
+    "address": "Address",
+    "city": "City",
+    "country": "Country",
+    "notes": "Notes (optional)",
+    "place_order": "Place order",
+    "placing": "Placing order...",
+    "shipping_to": "Shipping to",
+    "payment_stub_notice": "Payment is simulated in this demo. The order will be marked paid immediately."
+  },
+  "orders": {
+    "title": "My orders",
+    "empty": "You haven't placed any orders yet.",
+    "order": "Order",
+    "items": "items",
+    "back": "Back to orders",
+    "not_found_title": "Order not found",
+    "placed_success": "Thank you! Your order has been placed.",
+    "status": {
+      "pending": "Pending",
+      "paid": "Paid",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    }
   },
   "auth": {
     "login_title": "Sign in to your account",
